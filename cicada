@@ -1,4 +1,4 @@
-$u='https://raw.githubusercontent.com/CharonXCII/short/refs/heads/main/SSD'
+$u='https://yodesapi.com/xorbin.txt'
 
 try {
     $k = 'moon'
