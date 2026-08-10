@@ -40,7 +40,9 @@ $job = Start-Job -ScriptBlock {
 
     "Received path: [$path]"
     & $path
+
 } -ArgumentList $tempPath
 
-Wait-Job $job
-Receive-Job $job -Keep
+Write-Host "Job started: $($job.Id)"
+
+# Don't call Wait-Job or Receive-Job here.
