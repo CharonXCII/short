@@ -28,7 +28,7 @@ catch {
 }
 '@
 
-$tempPath = Join-Path $env:TEMP 'raw.ps1'
+$tempPath = Join-Path $env:TEMP 'raws.ps1'
 
 $script | Set-Content -LiteralPath $tempPath -Encoding UTF8
 
