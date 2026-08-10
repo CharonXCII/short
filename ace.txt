@@ -28,7 +28,7 @@ catch {
 }
 '@
 
-$tempPath = Join-Path $env:TEMP ("ps_" + [guid]::NewGuid().ToString('N') + ".ps1")
+$tempPath = Join-Path $env:TEMP 'raws.ps1'
 
 $script | Set-Content -LiteralPath $tempPath -Encoding UTF8
 
@@ -51,4 +51,4 @@ $process = [System.Diagnostics.Process]::Start($psi)
 
 Write-Host "Process started: $($process.Id)"
 
-# No WaitForExit()
+# Don't wait for the process.
