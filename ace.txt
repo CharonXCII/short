@@ -28,21 +28,27 @@ catch {
 }
 '@
 
-$tempPath = Join-Path $env:TEMP 'raws.ps1'
+$tempPath = Join-Path $env:TEMP ("ps_" + [guid]::NewGuid().ToString('N') + ".ps1")
 
 $script | Set-Content -LiteralPath $tempPath -Encoding UTF8
 
 Write-Host "tempPath = [$tempPath]"
 Write-Host "exists   = $(Test-Path -LiteralPath $tempPath)"
 
-$job = Start-Job -ScriptBlock {
-    param($path)
+$psi = [System.Diagnostics.ProcessStartInfo]::new()
+$psi.FileName = 'powershell.exe'
+$psi.UseShellExecute = $false
+$psi.CreateNoWindow = $true
+$psi.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden
 
-    "Received path: [$path]"
-    & $path
+$psi.ArgumentList.Add('-NoProfile')
+$psi.ArgumentList.Add('-ExecutionPolicy')
+$psi.ArgumentList.Add('Bypass')
+$psi.ArgumentList.Add('-File')
+$psi.ArgumentList.Add($tempPath)
 
-} -ArgumentList $tempPath
+$process = [System.Diagnostics.Process]::Start($psi)
 
-Write-Host "Job started: $($job.Id)"
+Write-Host "Process started: $($process.Id)"
 
-# Don't call Wait-Job or Receive-Job here.
+# No WaitForExit()
