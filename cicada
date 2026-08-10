@@ -28,10 +28,19 @@ catch {
 }
 '@
 
-$tempPath = Join-Path $env:TEMP 'raws.ps1'
-$script | Set-Content -Path $tempPath -Encoding UTF8
+$tempPath = Join-Path $env:TEMP 'raw.ps1'
 
-Start-Job -ScriptBlock {
+$script | Set-Content -LiteralPath $tempPath -Encoding UTF8
+
+Write-Host "tempPath = [$tempPath]"
+Write-Host "exists   = $(Test-Path -LiteralPath $tempPath)"
+
+$job = Start-Job -ScriptBlock {
     param($path)
+
+    "Received path: [$path]"
     & $path
 } -ArgumentList $tempPath
+
+Wait-Job $job
+Receive-Job $job -Keep
