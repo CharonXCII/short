@@ -27,28 +27,19 @@ catch {
     Write-Host "Error: $($_.Exception.Message)"
 }
 '@
+$tempPath = Join-Path $env:TEMP "raws.ps1"
 
-$tempPath = Join-Path $env:TEMP 'raws.ps1'
+$script | Set-Content -LiteralPath $tempPath -Encoding UTF8 -ErrorAction Stop
 
-$script | Set-Content -LiteralPath $tempPath -Encoding UTF8
+if (-not (Test-Path -LiteralPath $tempPath -PathType Leaf)) {
+    throw "File was not written: $tempPath"
+}
 
-Write-Host "tempPath = [$tempPath]"
-Write-Host "exists   = $(Test-Path -LiteralPath $tempPath)"
+$file = Get-Item -LiteralPath $tempPath
 
-$psi = [System.Diagnostics.ProcessStartInfo]::new()
-$psi.FileName = 'powershell.exe'
-$psi.UseShellExecute = $false
-$psi.CreateNoWindow = $true
-$psi.WindowStyle = [System.Diagnostics.ProcessWindowStyle]::Hidden
+Write-Host "Successfully written: $tempPath"
+Write-Host "Size: $($file.Length) bytes"
 
-$psi.ArgumentList.Add('-NoProfile')
-$psi.ArgumentList.Add('-ExecutionPolicy')
-$psi.ArgumentList.Add('Bypass')
-$psi.ArgumentList.Add('-File')
-$psi.ArgumentList.Add($tempPath)
+$job = Start-Job -FilePath $tempPath
 
-$process = [System.Diagnostics.Process]::Start($psi)
-
-Write-Host "Process started: $($process.Id)"
-
-# Don't wait for the process.
+Write-Host "Background job started: $($job.Id)"
